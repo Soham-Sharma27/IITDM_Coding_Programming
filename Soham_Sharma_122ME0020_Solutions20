@@ -1,0 +1,36 @@
+Q1 - solution -->
+    ['Banana', 'Apple', 'Strawberry']
+
+Q2 - solution -->
+    [10,30,50,70,90]
+
+Q3 - solution -->
+    ['Tomato', 'Strawberry', 'Grapes']
+
+Q4 - solution -->
+    [10,30,50,70,90]
+
+
+Q5 - solution -->
+    11,59
+
+
+Q6 - solution -->
+    2
+
+
+Q7 - solution -->
+    def anagram_checking(a,b):
+    str1 = a.lower()
+    str2 = b.lower()
+    
+    if len(str1) != len(str2):
+        return False
+    else:
+        sstr1=sorted(str1)
+        sstr2=sorted(str2)
+        
+        if sstr1 == sstr2:
+            return True
+        else:
+            return False
