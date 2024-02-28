@@ -1,0 +1,99 @@
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import plotly.io as pio
+import plotly.colors as pc
+
+pio.templates.default = "plotly_white"
+
+df = pd.read_csv("C:/Users/soham/Downloads/Sample - Superstore.csv",encoding='windows-1254')
+
+df['Order Date'] = pd.to_datetime(df['Order Date'])
+df['Order Month'] = df['Order Date'].dt.month
+df['Order Year'] = df['Order Date'].dt.year
+df['Order Day'] = df['Order Date'].dt.day
+
+monthly_sales = df.groupby(['Order Year', 'Order Month']).agg({'Sales': 'sum'}).reset_index()
+
+fig = px.line(
+    monthly_sales,
+        x='Order Month',
+        y='Sales',
+          color='Order Year',
+            title='Monthly Sales Analysis'
+            )
+
+fig.show()
+
+sales_by_category = df.groupby('Category').agg({'Sales': 'sum'}).reset_index()
+
+fig = px.pie(
+    sales_by_category,
+      values='Sales',
+        hole=0.6,
+            names='Category',
+                title='Sales by Category'
+                )
+
+fig.show()
+
+sales_by_subcategory = df.groupby('Sub-Category').agg({'Sales': 'sum'}).reset_index()
+
+fig = px.bar(
+    sales_by_subcategory,
+      x='Sub-Category',
+        y='Sales',
+          title='Sales by Sub-Category'
+          )
+
+fig.show()
+
+df['Profit'] = df['Profit'].astype(float)
+monthly_profit = df.groupby(['Order Year', 'Order Month']).agg({'Profit': 'sum'}).reset_index()
+
+fig = px.line(
+    monthly_profit,
+      x='Order Month',
+        y='Profit',
+          color='Order Year',
+            title='Monthly Profit Analysis'
+            )
+
+fig.show()
+
+profit_by_category = df.groupby('Category').agg({'Profit': 'sum'}).reset_index()
+
+fig = px.pie(
+    profit_by_category,
+      values='Profit',
+        hole=0.6,
+            names='Category',
+                title='Profit by Category'
+                )
+
+fig.show()
+
+profit_by_subcategory = df.groupby('Sub-Category').agg({'Profit': 'sum'}).reset_index()
+
+fig = px.bar(
+    profit_by_subcategory,
+      x='Sub-Category',
+        y='Profit',
+            title='Profit by Sub-Category'
+            )
+
+fig.show()
+
+sales_profit_by_segment = df.groupby('Segment').agg({'Sales': 'sum', 'Profit': 'sum'}).reset_index()
+
+fig = go.Figure(data=[
+    go.Bar(name='Sales', x=sales_profit_by_segment['Segment'], y=sales_profit_by_segment['Sales']),
+    go.Bar(name='Profit', x=sales_profit_by_segment['Segment'], y=sales_profit_by_segment['Profit'])
+])
+
+fig.update_layout(
+    barmode='group',
+      title='Sales and Profit Analysis by Customer Segments'
+      )
+
+fig.show()
